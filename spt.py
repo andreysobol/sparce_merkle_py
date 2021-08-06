@@ -6,6 +6,10 @@ class SparseMerkleTree():
     def __init__(self) -> None:
         pass
 
+    def get_root(self) -> bytes:
+        depth = 10
+        return self.lists[depth][0]
+
     def initialise_empty(self) -> None:
         max_elements = 1024
         depth = 10
@@ -20,7 +24,7 @@ class SparseMerkleTree():
             new_level = [sha256(prev_level[i] + prev_level[i+1]).digest() for i in iterator]
             return levels + [new_level]
 
-        def calculate_full_tree(elememts, depth):
+        def calculate_full_tree(elements, depth):
             hashed_elements = [sha256(element).digest() for element in elements]
             return reduce(calculate_level, range(0, depth), [hashed_elements])
 
@@ -31,3 +35,4 @@ class SparseMerkleTree():
 if __name__ == "__main__":
     spt = SparseMerkleTree()
     spt.initialise_empty()
+    spt.get_root()
