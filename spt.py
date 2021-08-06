@@ -6,6 +6,10 @@ class SparseMerkleTree():
     def __init__(self) -> None:
         pass
 
+    def setup_depth(self, depth: int) -> None:
+        self.depth = depth
+        self.max_elements = 2**depth
+
     def get_root(self) -> bytes:
         depth = 10
         return self.lists[depth][0]
@@ -34,5 +38,6 @@ class SparseMerkleTree():
 
 if __name__ == "__main__":
     spt = SparseMerkleTree()
+    spt.setup_depth(10)
     spt.initialise_empty()
     spt.get_root()
