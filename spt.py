@@ -17,7 +17,6 @@ class SparseMerkleTree():
         def calculate_level(levels, iteration):
             prev_level = levels[iteration]
             iterator = range(0, len(prev_level) // 2)
-            s = sha256(prev_level[0] + prev_level[0+1]).digest()
             new_level = [sha256(prev_level[i] + prev_level[i+1]).digest() for i in iterator]
             return levels + [new_level]
 
