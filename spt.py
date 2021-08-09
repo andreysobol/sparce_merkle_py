@@ -1,5 +1,6 @@
 from hashlib import sha256
 from functools import reduce
+from typing import Union
 
 class SparseMerkleTree():
 
@@ -21,7 +22,7 @@ class SparseMerkleTree():
         return levels + [new_level]
 
     def calculate_full_tree(self, elements, depth):
-        hashed_elements = [self.calculate_hash(element) for element in elements]
+        hashed_elements = dict(zip(range(0, len(elements)), [self.calculate_hash(element) for element in elements]))
         return reduce(self.calculate_level, range(0, depth), [hashed_elements])
 
     def set_elements(self, elements) -> None:
@@ -32,8 +33,10 @@ class SparseMerkleTree():
         elements = [self.empty_element for _ in range(0, self.max_elements)]
         self.set_elements(elements)
 
-    def calculate_leaf(self, lists, level, i) -> bytes:
+    def calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
         full_level = lists[level]
+        #if (2*i not in full_level) and (2*i+1 not in full_level):
+        #    return None
         return self.calculate_hash(full_level[2*i] + full_level[2*i+1])
 
     def calculate_and_update_leaf(self, lists, params) -> list:
