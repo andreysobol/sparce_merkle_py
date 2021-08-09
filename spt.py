@@ -54,9 +54,27 @@ class SparseMerkleTree():
 
     def calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
         full_level = lists[level]
-        if (2*i not in full_level) and (2*i+1 not in full_level):
+
+        i0 = 2*i
+        i1 = 2*i+1
+
+        v0_exist = i0 in full_level
+        v1_exist = i1 in full_level
+
+        if (not v0_exist) and (not v1_exist):
             return None
-        return self.calculate_hash(full_level[2*i] + full_level[2*i+1])
+
+        if v0_exist:
+            v0 = full_level[i0]
+        else:
+            v0 = self.calculate_empty_leaf_hash(level)
+
+        if v1_exist:
+            v1 = full_level[i1]
+        else:
+            v1 = self.calculate_empty_leaf_hash(level)
+
+        return self.calculate_hash(v0 + v1)
 
     def calculate_and_update_leaf(self, lists, params) -> list:
         (level, i) = params
