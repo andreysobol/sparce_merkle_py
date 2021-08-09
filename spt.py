@@ -14,23 +14,23 @@ class SparseMerkleTree():
         depth = 10
         return self.lists[depth][0]
 
+    def calculate_level(self, levels, iteration):
+        prev_level = levels[iteration]
+        iterator = range(0, len(prev_level) // 2)
+        new_level = [sha256(prev_level[i] + prev_level[i+1]).digest() for i in iterator]
+        return levels + [new_level]
+
+    def calculate_full_tree(self, elements, depth):
+        hashed_elements = [sha256(element).digest() for element in elements]
+        return reduce(self.calculate_level, range(0, depth), [hashed_elements])
+
     def initialise_empty(self) -> None:
         self.empty_element = b'\0'
 
         elements = [self.empty_element for _ in range(0, self.max_elements)]
         self.elements = elements
 
-        def calculate_level(levels, iteration):
-            prev_level = levels[iteration]
-            iterator = range(0, len(prev_level) // 2)
-            new_level = [sha256(prev_level[i] + prev_level[i+1]).digest() for i in iterator]
-            return levels + [new_level]
-
-        def calculate_full_tree(elements, depth):
-            hashed_elements = [sha256(element).digest() for element in elements]
-            return reduce(calculate_level, range(0, depth), [hashed_elements])
-
-        self.lists = calculate_full_tree(self.elements, self.depth)
+        self.lists = self.calculate_full_tree(self.elements, self.depth)
 
     def calculate_leaf(self, lists, level, i) -> bytes:
         full_level = lists[level]
