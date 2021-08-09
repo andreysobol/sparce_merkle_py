@@ -33,8 +33,7 @@ class SparseMerkleTree():
 
     def initialise_empty(self) -> None:
         elements = [self.empty_element for _ in range(0, self.max_elements)]
-        self.elements = elements
-        self.lists = self.calculate_full_tree(self.elements, self.depth)
+        self.set_elements(elements)
 
     def calculate_leaf(self, lists, level, i) -> bytes:
         full_level = lists[level]
