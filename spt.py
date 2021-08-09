@@ -13,8 +13,10 @@ class SparseMerkleTree():
         self.max_elements = 2**depth
 
     def get_root(self) -> bytes:
-        depth = 10
-        return self.lists[depth][0]
+        if 0 in self.lists[self.depth]:
+            return self.lists[self.depth][0]
+        else:
+            return self.calculate_empty_leaf_hash(self.depth)
 
     def calculate_level(self, levels, iteration):
         prev_level = levels[iteration]
@@ -33,8 +35,10 @@ class SparseMerkleTree():
         self.lists = self.calculate_full_tree(self.elements, self.depth)
 
     def initialise_empty(self) -> None:
-        elements = [self.empty_element for _ in range(0, self.max_elements)]
-        self.set_elements(elements)
+        #elements = [self.empty_element for _ in range(0, self.max_elements)]
+        self.elements = {}
+        self.lists = [{}] * (self.depth + 1)
+        #self.set_elements(elements)
 
     def calculate_empty_leaf_hash(self, level):
 
@@ -90,13 +94,13 @@ class SparseMerkleTree():
         self.lists = reduce(self.calculate_and_update_leaf, params, self.lists)
 
     def add_element(self, index: int, value: bytes) -> None:
-        if self.elements[index] == self.empty_element:
+        if index not in self.elements:
             self.modify_element(index, value)
         else:
             raise Exception('Value exist')
 
     def remove_element(self, index: int) -> None:
-        if self.elements[index] != self.empty_element:
+        if index in self.elements:
             self.modify_element(index, self.empty_element)
         else:
             raise Exception("Value doesn't exist")
@@ -117,3 +121,5 @@ if __name__ == "__main__":
     for item in spt.lists:
         print(item)
         print()
+    
+    print(spt.cache_empty_values)
