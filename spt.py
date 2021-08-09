@@ -6,6 +6,7 @@ class SparseMerkleTree():
 
     def __init__(self) -> None:
         self.empty_element = b'\0'
+        self.cache_empty_values = {}
 
     def setup_depth(self, depth: int) -> None:
         self.depth = depth
@@ -37,10 +38,24 @@ class SparseMerkleTree():
         elements = [self.empty_element for _ in range(0, self.max_elements)]
         self.set_elements(elements)
 
+    def calculate_empty_leaf_hash(self, level):
+
+        if level in self.cache_empty_values:
+            return self.cache_empty_values[level]
+
+        if level == 0:
+            v = self.calculate_hash(self.empty_element)
+        else:
+            prev = self.calculate_empty_leaf_hash(level - 1)
+            v = self.calculate_hash(prev + prev)
+
+        self.cache_empty_values[level] = v
+        return v
+
     def calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
         full_level = lists[level]
-        #if (2*i not in full_level) and (2*i+1 not in full_level):
-        #    return None
+        if (2*i not in full_level) and (2*i+1 not in full_level):
+            return None
         return self.calculate_hash(full_level[2*i] + full_level[2*i+1])
 
     def calculate_and_update_leaf(self, lists, params) -> list:
