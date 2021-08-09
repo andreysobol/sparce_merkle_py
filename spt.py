@@ -4,7 +4,7 @@ from functools import reduce
 class SparseMerkleTree():
 
     def __init__(self) -> None:
-        pass
+        self.empty_element = b'\0'
 
     def calculate_hash(self, preimage) -> bytes:
         return sha256(preimage).digest()
