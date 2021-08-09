@@ -42,7 +42,7 @@ class SparseMerkleTree():
         lists[level+1][i] = leaf
         return lists
 
-    def modify_element(self, index: int, value: bytes):
+    def modify_element(self, index: int, value: bytes) -> None:
         self.elements[index] = value
         hashed_element = sha256(value).digest()
         self.lists[0][index] = hashed_element
