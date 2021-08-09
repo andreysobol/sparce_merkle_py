@@ -6,6 +6,9 @@ class SparseMerkleTree():
     def __init__(self) -> None:
         pass
 
+    def calculate_hash(self, preimage) -> bytes:
+        return sha256(preimage).digest()
+
     def setup_depth(self, depth: int) -> None:
         self.depth = depth
         self.max_elements = 2**depth
@@ -17,11 +20,11 @@ class SparseMerkleTree():
     def calculate_level(self, levels, iteration):
         prev_level = levels[iteration]
         iterator = range(0, len(prev_level) // 2)
-        new_level = [sha256(prev_level[i] + prev_level[i+1]).digest() for i in iterator]
+        new_level = [self.calculate_hash(prev_level[i] + prev_level[i+1]) for i in iterator]
         return levels + [new_level]
 
     def calculate_full_tree(self, elements, depth):
-        hashed_elements = [sha256(element).digest() for element in elements]
+        hashed_elements = [self.calculate_hash(element) for element in elements]
         return reduce(self.calculate_level, range(0, depth), [hashed_elements])
 
     def initialise_empty(self) -> None:
@@ -34,7 +37,7 @@ class SparseMerkleTree():
 
     def calculate_leaf(self, lists, level, i) -> bytes:
         full_level = lists[level]
-        return sha256(full_level[2*i] + full_level[2*i+1]).digest()
+        return self.calculate_hash(full_level[2*i] + full_level[2*i+1])
 
     def calculate_and_update_leaf(self, lists, params) -> list:
         (level, i) = params
@@ -44,7 +47,7 @@ class SparseMerkleTree():
 
     def modify_element(self, index: int, value: bytes) -> None:
         self.elements[index] = value
-        hashed_element = sha256(value).digest()
+        hashed_element = self.calculate_hash(value)
         self.lists[0][index] = hashed_element
         levels = range(0, self.depth)
         indexs = [index // (2**power) for power in range(1, self.depth+1)]
