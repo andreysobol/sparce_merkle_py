@@ -6,9 +6,6 @@ class SparseMerkleTree():
     def __init__(self) -> None:
         self.empty_element = b'\0'
 
-    def calculate_hash(self, preimage) -> bytes:
-        return sha256(preimage).digest()
-
     def setup_depth(self, depth: int) -> None:
         self.depth = depth
         self.max_elements = 2**depth
@@ -67,8 +64,14 @@ class SparseMerkleTree():
             raise Exception("Value doesn't exist")
 
 
+class Sha256SparseMerkleTree(SparseMerkleTree):
+
+    def calculate_hash(self, preimage) -> bytes:
+        return sha256(preimage).digest()
+
+
 if __name__ == "__main__":
-    spt = SparseMerkleTree()
+    spt = Sha256SparseMerkleTree()
     spt.setup_depth(10)
     spt.initialise_empty()
     spt.get_root()
