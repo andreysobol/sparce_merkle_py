@@ -20,7 +20,7 @@ class SparseMerkleTree():
     def calculate_level(self, levels, iteration):
         prev_level = levels[iteration]
         iterator = range(0, len(prev_level) // 2)
-        new_level = [self.calculate_hash(prev_level[i] + prev_level[i+1]) for i in iterator]
+        new_level = [self.calculate_leaf(levels, iteration, i) for i in iterator]
         return levels + [new_level]
 
     def calculate_full_tree(self, elements, depth):
