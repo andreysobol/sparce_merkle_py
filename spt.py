@@ -23,8 +23,6 @@ class SparseMerkleTree():
         params = zip([iteration] * size, iterator)
         levels = levels + [{}]
         return reduce(self.calculate_and_update_leaf, params, levels)
-        #new_level = [self.calculate_leaf(levels, iteration, i) for i in iterator]
-        #return levels + [new_level]
 
     def calculate_full_tree(self, elements, depth):
         hashed_elements = dict(zip(range(0, len(elements)), [self.calculate_hash(element) for element in elements]))
