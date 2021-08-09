@@ -15,9 +15,9 @@ class SparseMerkleTree():
         return self.lists[depth][0]
 
     def initialise_empty(self) -> None:
-        empty_element = b'\0'
+        self.empty_element = b'\0'
 
-        elements = [empty_element for _ in range(0, self.max_elements)]
+        elements = [self.empty_element for _ in range(0, self.max_elements)]
         self.elements = elements
 
         def calculate_level(levels, iteration):
@@ -32,10 +32,35 @@ class SparseMerkleTree():
 
         self.lists = calculate_full_tree(self.elements, self.depth)
 
-        return 
+    def calculate_leaf(self, lists, level, i) -> bytes:
+        full_level = lists[level]
+        return sha256(full_level[2*i] + full_level[2*i+1]).digest()
+
+    def calculate_and_update_leaf(self, lists, params) -> list:
+        (level, i) = params
+        leaf = self.calculate_leaf(lists, level, i)
+        lists[level+1][i] = leaf
+        return lists
+
+    def add_element(self, index: int, value: bytes) -> None:
+        if self.elements[index] == self.empty_element:
+            self.elements[index] = value
+            hashed_element = sha256(value).digest()
+            self.lists[0][index] = hashed_element
+            levels = range(0, self.depth)
+            indexs = [index // (2**power) for power in range(1, self.depth+1)]
+            params = zip(levels, indexs)
+            self.lists = reduce(self.calculate_and_update_leaf, params, self.lists)
+        else:
+            raise Exception('Value exist')
+
 
 if __name__ == "__main__":
     spt = SparseMerkleTree()
     spt.setup_depth(10)
     spt.initialise_empty()
     spt.get_root()
+    spt.add_element(0, b"1234")
+    for item in spt.lists:
+        print(item)
+        print()
