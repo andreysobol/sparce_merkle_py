@@ -42,17 +42,26 @@ class SparseMerkleTree():
         lists[level+1][i] = leaf
         return lists
 
+    def modify_element(self, index: int, value: bytes):
+        self.elements[index] = value
+        hashed_element = sha256(value).digest()
+        self.lists[0][index] = hashed_element
+        levels = range(0, self.depth)
+        indexs = [index // (2**power) for power in range(1, self.depth+1)]
+        params = zip(levels, indexs)
+        self.lists = reduce(self.calculate_and_update_leaf, params, self.lists)
+
     def add_element(self, index: int, value: bytes) -> None:
         if self.elements[index] == self.empty_element:
-            self.elements[index] = value
-            hashed_element = sha256(value).digest()
-            self.lists[0][index] = hashed_element
-            levels = range(0, self.depth)
-            indexs = [index // (2**power) for power in range(1, self.depth+1)]
-            params = zip(levels, indexs)
-            self.lists = reduce(self.calculate_and_update_leaf, params, self.lists)
+            self.modify_element(index, value)
         else:
             raise Exception('Value exist')
+
+    def remove_element(self, index: int) -> None:
+        if self.elements[index] != self.empty_element:
+            self.modify_element(index, self.empty_element)
+        else:
+            raise Exception("Value doesn't exist")
 
 
 if __name__ == "__main__":
