@@ -108,16 +108,3 @@ class Sha256SparseMerkleTree(SparseMerkleTree):
 
     def calculate_hash(self, preimage) -> bytes:
         return sha256(preimage).digest()
-
-
-if __name__ == "__main__":
-    spt = Sha256SparseMerkleTree()
-    spt.setup_depth(10)
-    spt.initialise_empty()
-    spt.get_root()
-    spt.add_element(0, b"1234")
-    for item in spt.lists:
-        print(item)
-        print()
-    
-    print(spt.cache_empty_values)
