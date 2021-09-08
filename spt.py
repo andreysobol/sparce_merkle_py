@@ -37,7 +37,7 @@ class SparseMerkleTree():
     def initialise_empty(self) -> None:
         #elements = [self.empty_element for _ in range(0, self.max_elements)]
         self.elements = {}
-        self.lists = [{}] * (self.depth + 1)
+        self.lists = [{} for _ in range(0, self.depth + 1)]
         #self.set_elements(elements)
 
     def calculate_empty_leaf_hash(self, level):
