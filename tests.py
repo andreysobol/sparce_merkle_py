@@ -52,7 +52,41 @@ def one_element_tests():
 
     assert(test_vec == result_vec)
 
+def step_by_step_test():
+
+    def get_mt_4_root(elements):
+        h_elements = [sha256(item).digest() for item in elements]
+        left = sha256(h_elements[0] + h_elements[1]).digest()
+        right = sha256(h_elements[2] + h_elements[3]).digest()
+        root = sha256(left + right).digest()
+        return root
+
+    spt = Sha256SparseMerkleTree()
+    spt.setup_depth(2)
+    spt.initialise_empty()
+
+    spt.add_element(0, b'apple')
+    root = spt.get_root()
+    test_result = get_mt_4_root([b'apple', b'\0', b'\0', b'\0'])
+    assert(root == test_result)
+
+    spt.add_element(1, b'avocado')
+    root = spt.get_root()
+    test_result = get_mt_4_root([b'apple', b'avocado', b'\0', b'\0'])
+    assert(root == test_result)
+
+    spt.add_element(2, b'clock')
+    root = spt.get_root()
+    test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'\0'])
+    assert(root == test_result)
+
+    spt.add_element(3, b'great')
+    root = spt.get_root()
+    test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
+    assert(root == test_result)
+
 if __name__ == "__main__":
     empty_roots_test()
     one_element_tests()
+    step_by_step_test()
     print("All tests are correct")
