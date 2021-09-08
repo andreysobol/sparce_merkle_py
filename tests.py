@@ -26,3 +26,4 @@ def empty_roots_test():
 
 if __name__ == "__main__":
     empty_roots_test()
+    print("All tests are correct")
