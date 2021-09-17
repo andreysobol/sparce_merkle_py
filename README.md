@@ -1,4 +1,4 @@
-optimised sprace merkle tree writen on python
+optimised sprase merkle tree writen on python
 
 Run tests
 
