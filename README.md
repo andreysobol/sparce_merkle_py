@@ -1,4 +1,6 @@
-optimised sprase merkle tree writen on python
+# spt.py
+
+Optimised sprase merkle tree writen on python
 
 Run tests
 
