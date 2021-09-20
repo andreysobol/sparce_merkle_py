@@ -145,10 +145,12 @@ class SparseMerkleTree():
         else:
             raise Exception("Value doesn't exist")
 
-    def _calculate_hash(self, preimage) -> bytes:
+    @classmethod
+    def _calculate_hash(cls, preimage) -> bytes:
         raise Exception("Please declare _calculate_hash")
 
 class Sha256SparseMerkleTree(SparseMerkleTree):
 
-    def _calculate_hash(self, preimage) -> bytes:
+    @classmethod
+    def _calculate_hash(cls, preimage) -> bytes:
         return sha256(preimage).digest()
