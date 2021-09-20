@@ -27,3 +27,9 @@ cov
 ```
 coverage report spt.py 
 ```
+
+html report
+
+```
+coverage html spt.py
+```
