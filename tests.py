@@ -20,7 +20,7 @@ class UnitTest(unittest.TestCase):
         def mt_roots(i):
             spt = Sha256SparseMerkleTree(i)
             return spt.get_root()
-        
+
         mt_roots_results = [mt_roots(item) for item in check_size]
 
         self.assertTrue(empties_results == mt_roots_results)
@@ -38,7 +38,7 @@ class UnitTest(unittest.TestCase):
             elements = [b'\0' for _ in range(0, 4)]
             elements[i] = element
             return get_mt_4_root(elements)
-        
+
         value = b'apple'
         test_vec = [get_mt_4_with_single_element(i, value) for i in range(0, 4)]
 
@@ -81,7 +81,7 @@ class UnitTest(unittest.TestCase):
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
         self.assertTrue(root == test_result)
-    
+
     def test_step_by_step_equel_to_calculate_full_tree_result(self):
 
         spt = Sha256SparseMerkleTree(2)
