@@ -32,7 +32,7 @@ class SparseMerkleTree():
         levels_check = range(new_depth, old_depth)
         lists = self.lists
         if False in [False for l in levels_check if 1 in lists[l]]:
-            raise Exception('Trying to remove non empty subtree')
+            raise IndexError('Trying to remove non empty subtree')
 
         self._setup_depth(new_depth)
 
@@ -57,7 +57,7 @@ class SparseMerkleTree():
 
     def set_elements(self, elements) -> None:
         if self.max_elements < len(elements):
-            raise Exception("Too many elements")
+            raise IndexError("Too many elements")
 
         self.elements = {
             i:elements[i] for i in range(0, len(elements)) if elements[i] != self.empty_element
@@ -116,7 +116,7 @@ class SparseMerkleTree():
     def modify_element(self, index: int, value: bytes) -> None:
 
         if index not in range(0, self.max_elements):
-            raise Exception('Incorrect index')
+            raise IndexError('Incorrect index')
 
         if value == self.empty_element:
             if index in self.elements:
@@ -137,13 +137,13 @@ class SparseMerkleTree():
         if index not in self.elements:
             self.modify_element(index, value)
         else:
-            raise Exception('Value exist')
+            raise KeyError('Value exist')
 
     def remove_element(self, index: int) -> None:
         if index in self.elements:
             self.modify_element(index, self.empty_element)
         else:
-            raise Exception("Value doesn't exist")
+            raise KeyError('Value does not exist')
 
     @classmethod
     def _calculate_hash(cls, preimage) -> bytes:

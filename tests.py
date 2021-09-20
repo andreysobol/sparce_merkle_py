@@ -11,9 +11,9 @@ class UnitTest(unittest.TestCase):
         def empties(i):
             if i==0:
                 return sha256(b'\0').digest()
-            else:
-                e = empties(i-1)
-                return sha256(e + e).digest()
+
+            emp = empties(i-1)
+            return sha256(emp + emp).digest()
 
         empties_results = [empties(item) for item in check_size]
 
@@ -138,9 +138,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.add_element(0, b'second try')
-        except Exception as e:
+        except KeyError as e:
             is_e = True
-            self.assertEqual(str(e), 'Value exist')
+            self.assertEqual(str(e), "'Value exist'")
         self.assertTrue(is_e)
 
     def test_value_doesnt_exist(self):
@@ -148,9 +148,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.remove_element(0)
-        except Exception as e:
+        except KeyError as e:
             is_e = True
-            self.assertEqual(str(e), "Value doesn't exist")
+            self.assertEqual(str(e), "'Value does not exist'")
         self.assertTrue(is_e)
 
     def test_incorrect_index(self):
@@ -158,7 +158,7 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.add_element(4, b'el')
-        except Exception as e:
+        except IndexError as e:
             is_e = True
             self.assertEqual(str(e), 'Incorrect index')
         self.assertTrue(is_e)
@@ -168,7 +168,7 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.set_elements([b'\0', b'\0', b'\0', b'\0', b'5el'])
-        except Exception as e:
+        except IndexError as e:
             is_e = True
             self.assertEqual(str(e), 'Too many elements')
         self.assertTrue(is_e)
@@ -210,7 +210,7 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.decrease_depth(1)
-        except Exception as e:
+        except IndexError as e:
             is_e = True
             self.assertEqual(str(e), 'Trying to remove non empty subtree')
         self.assertTrue(is_e)
