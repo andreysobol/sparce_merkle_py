@@ -4,9 +4,10 @@ from typing import Union
 
 class SparseMerkleTree():
 
-    def __init__(self) -> None:
+    def __init__(self, depth: int) -> None:
         self.empty_element = b'\0'
         self.cache_empty_values = {}
+        self.setup_depth(depth)
 
     def setup_depth(self, depth: int) -> None:
         self.depth = depth

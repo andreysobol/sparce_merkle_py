@@ -18,8 +18,7 @@ class UnitTest(unittest.TestCase):
         empties_results = [empties(item) for item in check_size]
 
         def mt_roots(i):
-            spt = Sha256SparseMerkleTree()
-            spt.setup_depth(i)
+            spt = Sha256SparseMerkleTree(i)
             spt.initialise_empty()
             return spt.get_root()
         
@@ -45,8 +44,7 @@ class UnitTest(unittest.TestCase):
         test_vec = [get_mt_4_with_single_element(i, value) for i in range(0, 4)]
 
         def generate_results(i):
-            spt = Sha256SparseMerkleTree()
-            spt.setup_depth(2)
+            spt = Sha256SparseMerkleTree(2)
             spt.initialise_empty()
             spt.add_element(i, value)
             return spt.get_root()
@@ -64,8 +62,7 @@ class UnitTest(unittest.TestCase):
             root = sha256(left + right).digest()
             return root
 
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.initialise_empty()
 
         spt.add_element(0, b'apple')
@@ -90,31 +87,27 @@ class UnitTest(unittest.TestCase):
     
     def test_step_by_step_equel_to_calculate_full_tree_result(self):
 
-        spt = Sha256SparseMerkleTree()
+        spt = Sha256SparseMerkleTree(2)
         spt.setup_depth(2)
         spt.initialise_empty()
 
         spt.add_element(0, b'beef')
-        spt1 = Sha256SparseMerkleTree()
-        spt1.setup_depth(2)
+        spt1 = Sha256SparseMerkleTree(2)
         spt1.set_elements([b'beef', b'\0', b'\0', b'\0'])
         self.assertTrue(spt.get_root() == spt1.get_root())
 
         spt.add_element(1, b'cost')
-        spt2 = Sha256SparseMerkleTree()
-        spt2.setup_depth(2)
+        spt2 = Sha256SparseMerkleTree(2)
         spt2.set_elements([b'beef', b'cost', b'\0', b'\0'])
         self.assertTrue(spt.get_root() == spt2.get_root())
 
         spt.add_element(2, b'enjoy')
-        spt3 = Sha256SparseMerkleTree()
-        spt3.setup_depth(2)
+        spt3 = Sha256SparseMerkleTree(2)
         spt3.set_elements([b'beef', b'cost', b'enjoy', b'\0'])
         self.assertTrue(spt.get_root() == spt3.get_root())
 
         spt.add_element(3, b'fox')
-        spt4 = Sha256SparseMerkleTree()
-        spt4.setup_depth(2)
+        spt4 = Sha256SparseMerkleTree(2)
         spt4.set_elements([b'beef', b'cost', b'enjoy', b'fox'])
         self.assertTrue(spt.get_root() == spt4.get_root())
 
@@ -127,8 +120,7 @@ class UnitTest(unittest.TestCase):
             root = sha256(left + right).digest()
             return root
 
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.initialise_empty()
 
         spt.add_element(1, b'fish')
@@ -147,8 +139,7 @@ class UnitTest(unittest.TestCase):
         self.assertTrue(root == test_result)
 
     def test_value_exist(self):
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.initialise_empty()
         spt.add_element(0, b'first try')
         is_e = False
@@ -160,8 +151,7 @@ class UnitTest(unittest.TestCase):
         self.assertTrue(is_e)
 
     def test_value_doesnt_exist(self):
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.initialise_empty()
         is_e = False
         try:
@@ -172,8 +162,7 @@ class UnitTest(unittest.TestCase):
         self.assertTrue(is_e)
 
     def test_incorrect_index(self):
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.initialise_empty()
         is_e = False
         try:
@@ -184,8 +173,7 @@ class UnitTest(unittest.TestCase):
         self.assertTrue(is_e)
 
     def test_many_element(self):
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         is_e = False
         try:
             spt.set_elements([b'\0', b'\0', b'\0', b'\0', b'5el'])
@@ -203,8 +191,7 @@ class UnitTest(unittest.TestCase):
             root = sha256(left + right).digest()
             return root
 
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(1)
+        spt = Sha256SparseMerkleTree(1)
         spt.set_elements([b'zero', b'one'])
         spt.increase_depth(1)
         root = spt.get_root()
@@ -215,8 +202,7 @@ class UnitTest(unittest.TestCase):
 
     def test_decrease_depth(self):
 
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(3)
+        spt = Sha256SparseMerkleTree(3)
         spt.set_elements([b'z', b'o'])
         spt.decrease_depth(2)
         root = spt.get_root()
@@ -227,8 +213,7 @@ class UnitTest(unittest.TestCase):
 
     def test_decrease_non_empty(self):
 
-        spt = Sha256SparseMerkleTree()
-        spt.setup_depth(2)
+        spt = Sha256SparseMerkleTree(2)
         spt.set_elements([b'blue', b'apple', b'dog'])
 
         is_e = False
