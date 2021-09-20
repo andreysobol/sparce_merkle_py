@@ -93,6 +93,10 @@ class SparseMerkleTree():
         return lists
 
     def modify_element(self, index: int, value: bytes) -> None:
+
+        if index not in range(0, self.max_elements):
+            raise Exception('Incorrect index')
+
         if value == self.empty_element:
             if index in self.elements:
                 del self.elements[index]

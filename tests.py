@@ -171,5 +171,17 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(str(e), "Value doesn't exist")
         self.assertTrue(is_e)
 
+    def test_incorrect_index(self):
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.initialise_empty()
+        is_e = False
+        try:
+            spt.add_element(4, b'el')
+        except Exception as e:
+            is_e = True
+            self.assertEqual(str(e), 'Incorrect index')
+        self.assertTrue(is_e)
+
 if __name__ == '__main__':
     unittest.main()
