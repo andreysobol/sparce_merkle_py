@@ -183,5 +183,16 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(str(e), 'Incorrect index')
         self.assertTrue(is_e)
 
+    def test_many_element(self):
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        is_e = False
+        try:
+            spt.set_elements([b'\0', b'\0', b'\0', b'\0', b'5el'])
+        except Exception as e:
+            is_e = True
+            self.assertEqual(str(e), 'Too many elements')
+        self.assertTrue(is_e)
+
 if __name__ == '__main__':
     unittest.main()
