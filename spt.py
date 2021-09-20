@@ -12,6 +12,17 @@ class SparseMerkleTree():
         self.depth = depth
         self.max_elements = 2**depth
 
+    def increase_depth(self, amount_of_level: int):
+        old_depth = self.depth
+        new_depth = self.depth + amount_of_level
+
+        params = zip(range(old_depth, new_depth), [0] * amount_of_level)
+        lists = self.lists + [{} for _ in range(old_depth, new_depth)]
+        self.lists = reduce(self._calculate_and_update_leaf, params, lists)
+
+        self.max_elements = 2**new_depth
+        self.depth = new_depth
+
     def get_root(self) -> bytes:
         if 0 in self.lists[self.depth]:
             return self.lists[self.depth][0]

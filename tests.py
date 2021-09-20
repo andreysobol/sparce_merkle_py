@@ -194,5 +194,24 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(str(e), 'Too many elements')
         self.assertTrue(is_e)
 
+    def test_increase_depth(self):
+
+        def get_mt_4_root(elements):
+            h_elements = [sha256(item).digest() for item in elements]
+            left = sha256(h_elements[0] + h_elements[1]).digest()
+            right = sha256(h_elements[2] + h_elements[3]).digest()
+            root = sha256(left + right).digest()
+            return root
+
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(1)
+        spt.set_elements([b'zero', b'one'])
+        spt.increase_depth(1)
+        root = spt.get_root()
+
+        test_result = get_mt_4_root([b'zero', b'one', b'\0', b'\0'])
+
+        self.assertTrue(root == test_result)
+
 if __name__ == '__main__':
     unittest.main()
