@@ -25,7 +25,7 @@ class UnitTest(unittest.TestCase):
         
         mt_roots_results = [mt_roots(item) for item in check_size]
 
-        assert(empties_results == mt_roots_results)
+        self.assertTrue(empties_results == mt_roots_results)
 
     def test_one_element(self):
 
@@ -53,7 +53,7 @@ class UnitTest(unittest.TestCase):
 
         result_vec = [generate_results(i) for i in range(0, 4)]
 
-        assert(test_vec == result_vec)
+        self.assertTrue(test_vec == result_vec)
 
     def test_step_by_step(self):
 
@@ -71,22 +71,22 @@ class UnitTest(unittest.TestCase):
         spt.add_element(0, b'apple')
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'\0', b'\0', b'\0'])
-        assert(root == test_result)
+        self.assertTrue(root == test_result)
 
         spt.add_element(1, b'avocado')
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'avocado', b'\0', b'\0'])
-        assert(root == test_result)
+        self.assertTrue(root == test_result)
 
         spt.add_element(2, b'clock')
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'\0'])
-        assert(root == test_result)
+        self.assertTrue(root == test_result)
 
         spt.add_element(3, b'great')
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
-        assert(root == test_result)
+        self.assertTrue(root == test_result)
 
 if __name__ == '__main__':
     unittest.main()
