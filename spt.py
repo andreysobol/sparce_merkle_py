@@ -38,8 +38,8 @@ class SparseMerkleTree():
     def get_root(self) -> bytes:
         if 0 in self.lists[self.depth]:
             return self.lists[self.depth][0]
-        else:
-            return self._calculate_empty_leaf_hash(self.depth)
+        
+        return self._calculate_empty_leaf_hash(self.depth)
 
     def _calculate_level(self, levels, iteration):
         size = 2 ** (self.depth - iteration - 1)
