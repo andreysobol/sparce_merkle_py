@@ -23,6 +23,18 @@ class SparseMerkleTree():
         self.max_elements = 2**new_depth
         self.depth = new_depth
 
+    def decrease_depth(self, amount_of_level: int):
+        old_depth = self.depth
+        new_depth = self.depth - amount_of_level
+
+        levels_check = range(new_depth, old_depth)
+        lists = self.lists
+        if False in [False for l in levels_check if 1 in lists[l]]:
+            raise Exception('Trying to remove non empty subtree')
+
+        self.max_elements = 2**new_depth
+        self.depth = new_depth
+
     def get_root(self) -> bytes:
         if 0 in self.lists[self.depth]:
             return self.lists[self.depth][0]

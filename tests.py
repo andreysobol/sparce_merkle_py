@@ -213,5 +213,31 @@ class UnitTest(unittest.TestCase):
 
         self.assertTrue(root == test_result)
 
+    def test_decrease_depth(self):
+
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(3)
+        spt.set_elements([b'z', b'o'])
+        spt.decrease_depth(2)
+        root = spt.get_root()
+
+        test_result = sha256(sha256(b'z').digest() + sha256(b'o').digest()).digest()
+
+        self.assertTrue(root == test_result)
+
+    def test_decrease_non_empty(self):
+
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.set_elements([b'blue', b'apple', b'dog'])
+
+        is_e = False
+        try:
+            spt.decrease_depth(1)
+        except Exception as e:
+            is_e = True
+            self.assertEqual(str(e), 'Trying to remove non empty subtree')
+        self.assertTrue(is_e)
+
 if __name__ == '__main__':
     unittest.main()
