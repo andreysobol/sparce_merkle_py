@@ -146,5 +146,30 @@ class UnitTest(unittest.TestCase):
         test_result = get_mt_4_root([b'\0', b'\0', b'\0', b'ice'])
         self.assertTrue(root == test_result)
 
+    def test_value_exist(self):
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.initialise_empty()
+        spt.add_element(0, b'first try')
+        is_e = False
+        try:
+            spt.add_element(0, b'second try')
+        except Exception as e:
+            is_e = True
+            self.assertEqual(str(e), 'Value exist')
+        self.assertTrue(is_e)
+
+    def test_value_doesnt_exist(self):
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.initialise_empty()
+        is_e = False
+        try:
+            spt.remove_element(0)
+        except Exception as e:
+            is_e = True
+            self.assertEqual(str(e), "Value doesn't exist")
+        self.assertTrue(is_e)
+
 if __name__ == '__main__':
     unittest.main()
