@@ -16,31 +16,31 @@ class SparseMerkleTree():
         if 0 in self.lists[self.depth]:
             return self.lists[self.depth][0]
         else:
-            return self.calculate_empty_leaf_hash(self.depth)
+            return self._calculate_empty_leaf_hash(self.depth)
 
-    def calculate_level(self, levels, iteration):
+    def _calculate_level(self, levels, iteration):
         size = 2 ** (self.depth - iteration - 1) 
         iterator = range(0, size)
         params = zip([iteration] * size, iterator)
         levels = levels + [{}]
-        return reduce(self.calculate_and_update_leaf, params, levels)
+        return reduce(self._calculate_and_update_leaf, params, levels)
 
-    def calculate_full_tree(self, elements, depth):
+    def _calculate_full_tree(self, elements, depth):
         r = range(0, len(elements))
         hashed_elements = {
             ei:self.calculate_hash(elements[ei]) for ei in r if elements[ei] != self.empty_element
         }
-        return reduce(self.calculate_level, range(0, depth), [hashed_elements])
+        return reduce(self._calculate_level, range(0, depth), [hashed_elements])
 
     def set_elements(self, elements) -> None:
         self.elements = elements
-        self.lists = self.calculate_full_tree(self.elements, self.depth)
+        self.lists = self._calculate_full_tree(self.elements, self.depth)
 
     def initialise_empty(self) -> None:
         self.elements = {}
         self.lists = [{} for _ in range(0, self.depth + 1)]
 
-    def calculate_empty_leaf_hash(self, level):
+    def _calculate_empty_leaf_hash(self, level):
 
         if level in self.cache_empty_values:
             return self.cache_empty_values[level]
@@ -48,13 +48,13 @@ class SparseMerkleTree():
         if level == 0:
             v = self.calculate_hash(self.empty_element)
         else:
-            prev = self.calculate_empty_leaf_hash(level - 1)
+            prev = self._calculate_empty_leaf_hash(level - 1)
             v = self.calculate_hash(prev + prev)
 
         self.cache_empty_values[level] = v
         return v
 
-    def calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
+    def _calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
         full_level = lists[level]
 
         i0 = 2*i
@@ -69,18 +69,18 @@ class SparseMerkleTree():
         if v0_exist:
             v0 = full_level[i0]
         else:
-            v0 = self.calculate_empty_leaf_hash(level)
+            v0 = self._calculate_empty_leaf_hash(level)
 
         if v1_exist:
             v1 = full_level[i1]
         else:
-            v1 = self.calculate_empty_leaf_hash(level)
+            v1 = self._calculate_empty_leaf_hash(level)
 
         return self.calculate_hash(v0 + v1)
 
-    def calculate_and_update_leaf(self, lists, params) -> list:
+    def _calculate_and_update_leaf(self, lists, params) -> list:
         (level, i) = params
-        leaf = self.calculate_leaf(lists, level, i)
+        leaf = self._calculate_leaf(lists, level, i)
         if leaf:
             lists[level+1][i] = leaf
         else:
@@ -95,7 +95,7 @@ class SparseMerkleTree():
         levels = range(0, self.depth)
         indexs = [index // (2**power) for power in range(1, self.depth+1)]
         params = zip(levels, indexs)
-        self.lists = reduce(self.calculate_and_update_leaf, params, self.lists)
+        self.lists = reduce(self._calculate_and_update_leaf, params, self.lists)
 
     def add_element(self, index: int, value: bytes) -> None:
         if index not in self.elements:
