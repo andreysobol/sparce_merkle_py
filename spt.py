@@ -26,14 +26,15 @@ class SparseMerkleTree():
         return reduce(self._calculate_and_update_leaf, params, levels)
 
     def _calculate_full_tree(self, elements, depth):
-        r = range(0, len(elements))
         hashed_elements = {
-            ei:self.calculate_hash(elements[ei]) for ei in r if elements[ei] != self.empty_element
+            k:self.calculate_hash(elements[k]) for k in elements
         }
         return reduce(self._calculate_level, range(0, depth), [hashed_elements])
 
     def set_elements(self, elements) -> None:
-        self.elements = elements
+        self.elements = {
+            i:elements[i] for i in range(0, len(elements)) if elements[i] != self.empty_element
+        }
         self.lists = self._calculate_full_tree(self.elements, self.depth)
 
     def initialise_empty(self) -> None:
