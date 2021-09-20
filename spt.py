@@ -90,7 +90,11 @@ class SparseMerkleTree():
         return lists
 
     def modify_element(self, index: int, value: bytes) -> None:
-        self.elements[index] = value
+        if value == self.empty_element:
+            if index in self.elements:
+                del self.elements[index]
+        else:
+            self.elements[index] = value
         hashed_element = self.calculate_hash(value)
         self.lists[0][index] = hashed_element
         levels = range(0, self.depth)
