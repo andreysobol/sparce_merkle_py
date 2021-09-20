@@ -118,6 +118,33 @@ class UnitTest(unittest.TestCase):
         spt4.set_elements([b'beef', b'cost', b'enjoy', b'fox'])
         self.assertTrue(spt.get_root() == spt4.get_root())
 
+    def test_remove(self):
+
+        def get_mt_4_root(elements):
+            h_elements = [sha256(item).digest() for item in elements]
+            left = sha256(h_elements[0] + h_elements[1]).digest()
+            right = sha256(h_elements[2] + h_elements[3]).digest()
+            root = sha256(left + right).digest()
+            return root
+
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.initialise_empty()
+
+        spt.add_element(1, b'fish')
+        root = spt.get_root()
+        test_result = get_mt_4_root([b'\0', b'fish', b'\0', b'\0'])
+        self.assertTrue(root == test_result)
+
+        spt.add_element(3, b'ice')
+        root = spt.get_root()
+        test_result = get_mt_4_root([b'\0', b'fish', b'\0', b'ice'])
+        self.assertTrue(root == test_result)
+
+        spt.remove_element(1)
+        root = spt.get_root()
+        test_result = get_mt_4_root([b'\0', b'\0', b'\0', b'ice'])
+        self.assertTrue(root == test_result)
 
 if __name__ == '__main__':
     unittest.main()
