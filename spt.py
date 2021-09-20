@@ -32,6 +32,9 @@ class SparseMerkleTree():
         return reduce(self._calculate_level, range(0, depth), [hashed_elements])
 
     def set_elements(self, elements) -> None:
+        if self.max_elements < len(elements):
+            raise Exception("Too many elements")
+
         self.elements = {
             i:elements[i] for i in range(0, len(elements)) if elements[i] != self.empty_element
         }
