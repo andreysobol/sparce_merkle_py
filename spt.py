@@ -113,7 +113,6 @@ class SparseMerkleTree():
 
     def remove_element(self, index: int) -> None:
         if index in self.elements:
-            # TODO: check correctness
             self.modify_element(index, self.empty_element)
         else:
             raise Exception("Value doesn't exist")
