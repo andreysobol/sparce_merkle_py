@@ -19,7 +19,6 @@ class UnitTest(unittest.TestCase):
 
         def mt_roots(i):
             spt = Sha256SparseMerkleTree(i)
-            spt.initialise_empty()
             return spt.get_root()
         
         mt_roots_results = [mt_roots(item) for item in check_size]
@@ -45,7 +44,6 @@ class UnitTest(unittest.TestCase):
 
         def generate_results(i):
             spt = Sha256SparseMerkleTree(2)
-            spt.initialise_empty()
             spt.add_element(i, value)
             return spt.get_root()
 
@@ -63,7 +61,6 @@ class UnitTest(unittest.TestCase):
             return root
 
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
 
         spt.add_element(0, b'apple')
         root = spt.get_root()
@@ -88,7 +85,6 @@ class UnitTest(unittest.TestCase):
     def test_step_by_step_equel_to_calculate_full_tree_result(self):
 
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
 
         spt.add_element(0, b'beef')
         spt1 = Sha256SparseMerkleTree(2)
@@ -120,7 +116,6 @@ class UnitTest(unittest.TestCase):
             return root
 
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
 
         spt.add_element(1, b'fish')
         root = spt.get_root()
@@ -139,7 +134,6 @@ class UnitTest(unittest.TestCase):
 
     def test_value_exist(self):
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
         spt.add_element(0, b'first try')
         is_e = False
         try:
@@ -151,7 +145,6 @@ class UnitTest(unittest.TestCase):
 
     def test_value_doesnt_exist(self):
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
         is_e = False
         try:
             spt.remove_element(0)
@@ -162,7 +155,6 @@ class UnitTest(unittest.TestCase):
 
     def test_incorrect_index(self):
         spt = Sha256SparseMerkleTree(2)
-        spt.initialise_empty()
         is_e = False
         try:
             spt.add_element(4, b'el')

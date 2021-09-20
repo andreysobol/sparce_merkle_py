@@ -8,6 +8,7 @@ class SparseMerkleTree():
         self.empty_element = b'\0'
         self.cache_empty_values = {}
         self._setup_depth(depth)
+        self._initialise_empty()
 
     def _setup_depth(self, depth: int) -> None:
         self.depth = depth
@@ -62,7 +63,7 @@ class SparseMerkleTree():
         }
         self.lists = self._calculate_full_tree(self.elements, self.depth)
 
-    def initialise_empty(self) -> None:
+    def _initialise_empty(self) -> None:
         self.elements = {}
         self.lists = [{} for _ in range(0, self.depth + 1)]
 
