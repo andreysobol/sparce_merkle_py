@@ -93,10 +93,13 @@ class SparseMerkleTree():
         if value == self.empty_element:
             if index in self.elements:
                 del self.elements[index]
+            if index in self.lists[0]:
+                del self.lists[0][index]
         else:
             self.elements[index] = value
-        hashed_element = self.calculate_hash(value)
-        self.lists[0][index] = hashed_element
+            hashed_element = self.calculate_hash(value)
+            self.lists[0][index] = hashed_element
+
         levels = range(0, self.depth)
         indexs = [index // (2**power) for power in range(1, self.depth+1)]
         params = zip(levels, indexs)
