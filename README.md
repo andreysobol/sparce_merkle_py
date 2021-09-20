@@ -13,3 +13,11 @@ or
 ```
 python3 -m unittest discover
 ```
+
+req
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
