@@ -7,9 +7,9 @@ class SparseMerkleTree():
     def __init__(self, depth: int) -> None:
         self.empty_element = b'\0'
         self.cache_empty_values = {}
-        self.setup_depth(depth)
+        self._setup_depth(depth)
 
-    def setup_depth(self, depth: int) -> None:
+    def _setup_depth(self, depth: int) -> None:
         self.depth = depth
         self.max_elements = 2**depth
 
@@ -21,8 +21,7 @@ class SparseMerkleTree():
         lists = self.lists + [{} for _ in range(old_depth, new_depth)]
         self.lists = reduce(self._calculate_and_update_leaf, params, lists)
 
-        self.max_elements = 2**new_depth
-        self.depth = new_depth
+        self._setup_depth(new_depth)
 
     def decrease_depth(self, amount_of_level: int):
         old_depth = self.depth
@@ -33,8 +32,7 @@ class SparseMerkleTree():
         if False in [False for l in levels_check if 1 in lists[l]]:
             raise Exception('Trying to remove non empty subtree')
 
-        self.max_elements = 2**new_depth
-        self.depth = new_depth
+        self._setup_depth(new_depth)
 
     def get_root(self) -> bytes:
         if 0 in self.lists[self.depth]:

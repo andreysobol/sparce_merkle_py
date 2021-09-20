@@ -88,7 +88,6 @@ class UnitTest(unittest.TestCase):
     def test_step_by_step_equel_to_calculate_full_tree_result(self):
 
         spt = Sha256SparseMerkleTree(2)
-        spt.setup_depth(2)
         spt.initialise_empty()
 
         spt.add_element(0, b'beef')
