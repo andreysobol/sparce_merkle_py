@@ -2,7 +2,7 @@
 
 Optimised sprase merkle tree writen on python
 
-req
+Requirements for tests
 
 ```
 python3 -m venv env
@@ -16,13 +16,13 @@ Run tests
 coverage run tests.py
 ```
 
-cov
+Show coverage
 
 ```
 coverage report spt.py 
 ```
 
-html report
+Show coverage HTML report
 
 ```
 coverage html spt.py
