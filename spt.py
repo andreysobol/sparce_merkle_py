@@ -50,7 +50,7 @@ class SparseMerkleTree():
 
     def _calculate_full_tree(self, elements, depth):
         hashed_elements = {
-            k:self.calculate_hash(elements[k]) for k in elements
+            k:self._calculate_hash(elements[k]) for k in elements
         }
         return reduce(self._calculate_level, range(0, depth), [hashed_elements])
 
@@ -73,10 +73,10 @@ class SparseMerkleTree():
             return self.cache_empty_values[level]
 
         if level == 0:
-            v = self.calculate_hash(self.empty_element)
+            v = self._calculate_hash(self.empty_element)
         else:
             prev = self._calculate_empty_leaf_hash(level - 1)
-            v = self.calculate_hash(prev + prev)
+            v = self._calculate_hash(prev + prev)
 
         self.cache_empty_values[level] = v
         return v
@@ -103,7 +103,7 @@ class SparseMerkleTree():
         else:
             v1 = self._calculate_empty_leaf_hash(level)
 
-        return self.calculate_hash(v0 + v1)
+        return self._calculate_hash(v0 + v1)
 
     def _calculate_and_update_leaf(self, lists, params) -> list:
         (level, i) = params
@@ -127,7 +127,7 @@ class SparseMerkleTree():
                 del self.lists[0][index]
         else:
             self.elements[index] = value
-            hashed_element = self.calculate_hash(value)
+            hashed_element = self._calculate_hash(value)
             self.lists[0][index] = hashed_element
 
         levels = range(0, self.depth)
@@ -147,8 +147,10 @@ class SparseMerkleTree():
         else:
             raise Exception("Value doesn't exist")
 
+    def _calculate_hash(self, preimage) -> bytes:
+        raise Exception("Please declare _calculate_hash")
 
 class Sha256SparseMerkleTree(SparseMerkleTree):
 
-    def calculate_hash(self, preimage) -> bytes:
+    def _calculate_hash(self, preimage) -> bytes:
         return sha256(preimage).digest()
