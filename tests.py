@@ -87,6 +87,37 @@ class UnitTest(unittest.TestCase):
         root = spt.get_root()
         test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
         self.assertTrue(root == test_result)
+    
+    def test_step_by_step_equel_to_calculate_full_tree_result(self):
+
+        spt = Sha256SparseMerkleTree()
+        spt.setup_depth(2)
+        spt.initialise_empty()
+
+        spt.add_element(0, b'beef')
+        spt1 = Sha256SparseMerkleTree()
+        spt1.setup_depth(2)
+        spt1.set_elements([b'beef', b'\0', b'\0', b'\0'])
+        self.assertTrue(spt.get_root() == spt1.get_root())
+
+        spt.add_element(1, b'cost')
+        spt2 = Sha256SparseMerkleTree()
+        spt2.setup_depth(2)
+        spt2.set_elements([b'beef', b'cost', b'\0', b'\0'])
+        self.assertTrue(spt.get_root() == spt2.get_root())
+
+        spt.add_element(2, b'enjoy')
+        spt3 = Sha256SparseMerkleTree()
+        spt3.setup_depth(2)
+        spt3.set_elements([b'beef', b'cost', b'enjoy', b'\0'])
+        self.assertTrue(spt.get_root() == spt3.get_root())
+
+        spt.add_element(3, b'fox')
+        spt4 = Sha256SparseMerkleTree()
+        spt4.setup_depth(2)
+        spt4.set_elements([b'beef', b'cost', b'enjoy', b'fox'])
+        self.assertTrue(spt.get_root() == spt4.get_root())
+
 
 if __name__ == '__main__':
     unittest.main()
