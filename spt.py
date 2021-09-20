@@ -19,15 +19,17 @@ class SparseMerkleTree():
             return self.calculate_empty_leaf_hash(self.depth)
 
     def calculate_level(self, levels, iteration):
-        prev_level = levels[iteration]
-        size = len(prev_level) // 2
+        size = 2 ** (self.depth - iteration - 1) 
         iterator = range(0, size)
         params = zip([iteration] * size, iterator)
         levels = levels + [{}]
         return reduce(self.calculate_and_update_leaf, params, levels)
 
     def calculate_full_tree(self, elements, depth):
-        hashed_elements = dict(zip(range(0, len(elements)), [self.calculate_hash(element) for element in elements]))
+        r = range(0, len(elements))
+        hashed_elements = {
+            ei:self.calculate_hash(elements[ei]) for ei in r if elements[ei] != self.empty_element
+        }
         return reduce(self.calculate_level, range(0, depth), [hashed_elements])
 
     def set_elements(self, elements) -> None:
@@ -79,7 +81,11 @@ class SparseMerkleTree():
     def calculate_and_update_leaf(self, lists, params) -> list:
         (level, i) = params
         leaf = self.calculate_leaf(lists, level, i)
-        lists[level+1][i] = leaf
+        if leaf:
+            lists[level+1][i] = leaf
+        else:
+            if i in lists[level+1]:
+                del lists[level+1][i] 
         return lists
 
     def modify_element(self, index: int, value: bytes) -> None:
