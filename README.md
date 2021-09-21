@@ -27,3 +27,9 @@ Show coverage HTML report
 ```
 coverage html spt.py
 ```
+
+Linter
+
+```
+pylint spt.py test.py
+```
