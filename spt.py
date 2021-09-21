@@ -45,7 +45,7 @@ class SparseMerkleTree():
     def _calculate_level(
         self,
         levels: list[dict[int, bytes]],
-        iteration: int
+        iteration: int,
     ) -> list[dict[int, bytes]]:
         size = 2 ** (self.depth - iteration - 1)
         iterator = range(0, size)
@@ -56,7 +56,7 @@ class SparseMerkleTree():
     def _calculate_full_tree(
         self,
         elements: dict[int, bytes],
-        depth: int
+        depth: int,
     ) -> list[dict[int, bytes]]:
         hashed_elements = {
             k:self._calculate_hash(elements[k]) for k in elements
@@ -86,7 +86,13 @@ class SparseMerkleTree():
         self.cache_empty_values[level] = value
         return value
 
-    def _calculate_leaf(self, lists, level, i) -> Union[list, type(None)]:
+    def _calculate_leaf(
+        self,
+        lists:list[dict[int, bytes]],
+        level:int,
+        i: int,
+    ) -> Union[list, type(None)]:
+
         full_level = lists[level]
 
         i_0 = 2*i
@@ -110,7 +116,11 @@ class SparseMerkleTree():
 
         return self._calculate_hash(v_0 + v_1)
 
-    def _calculate_and_update_leaf(self, lists, params) -> list[dict[int, bytes]]:
+    def _calculate_and_update_leaf(
+        self,
+        lists: list[dict[int, bytes]],
+        params: (int, int)
+    ) -> list[dict[int, bytes]]:
         (level, i) = params
         leaf = self._calculate_leaf(lists, level, i)
         if leaf:
