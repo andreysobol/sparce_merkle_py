@@ -138,9 +138,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.add_element(0, b'second try')
-        except KeyError as e:
+        except KeyError as k_e:
             is_e = True
-            self.assertEqual(str(e), "'Value exist'")
+            self.assertEqual(str(k_e), "'Value exist'")
         self.assertTrue(is_e)
 
     def test_value_doesnt_exist(self):
@@ -148,9 +148,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.remove_element(0)
-        except KeyError as e:
+        except KeyError as k_e:
             is_e = True
-            self.assertEqual(str(e), "'Value does not exist'")
+            self.assertEqual(str(k_e), "'Value does not exist'")
         self.assertTrue(is_e)
 
     def test_incorrect_index(self):
@@ -158,9 +158,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.add_element(4, b'el')
-        except IndexError as e:
+        except IndexError as i_e:
             is_e = True
-            self.assertEqual(str(e), 'Incorrect index')
+            self.assertEqual(str(i_e), 'Incorrect index')
         self.assertTrue(is_e)
 
     def test_many_element(self):
@@ -168,9 +168,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.set_elements([b'\0', b'\0', b'\0', b'\0', b'5el'])
-        except IndexError as e:
+        except IndexError as i_e:
             is_e = True
-            self.assertEqual(str(e), 'Too many elements')
+            self.assertEqual(str(i_e), 'Too many elements')
         self.assertTrue(is_e)
 
     def test_increase_depth(self):
@@ -210,9 +210,9 @@ class UnitTest(unittest.TestCase):
         is_e = False
         try:
             spt.decrease_depth(1)
-        except IndexError as e:
+        except IndexError as i_e:
             is_e = True
-            self.assertEqual(str(e), 'Trying to remove non empty subtree')
+            self.assertEqual(str(i_e), 'Trying to remove non empty subtree')
         self.assertTrue(is_e)
 
 if __name__ == '__main__':
