@@ -4,6 +4,13 @@ from spt import Sha256SparseMerkleTree, SparseMerkleTree
 
 class UnitTest(unittest.TestCase):
 
+    def get_mt_4_root(self, elements):
+        h_elements = [sha256(item).digest() for item in elements]
+        left = sha256(h_elements[0] + h_elements[1]).digest()
+        right = sha256(h_elements[2] + h_elements[3]).digest()
+        root = sha256(left + right).digest()
+        return root
+
     def test_empty_roots(self):
 
         check_size = range(1, 15)
@@ -27,17 +34,10 @@ class UnitTest(unittest.TestCase):
 
     def test_one_element(self):
 
-        def get_mt_4_root(elements):
-            h_elements = [sha256(item).digest() for item in elements]
-            left = sha256(h_elements[0] + h_elements[1]).digest()
-            right = sha256(h_elements[2] + h_elements[3]).digest()
-            root = sha256(left + right).digest()
-            return root
-
         def get_mt_4_with_single_element(i, element):
             elements = [b'\0' for _ in range(0, 4)]
             elements[i] = element
-            return get_mt_4_root(elements)
+            return self.get_mt_4_root(elements)
 
         value = b'apple'
         test_vec = [get_mt_4_with_single_element(i, value) for i in range(0, 4)]
@@ -53,33 +53,26 @@ class UnitTest(unittest.TestCase):
 
     def test_step_by_step(self):
 
-        def get_mt_4_root(elements):
-            h_elements = [sha256(item).digest() for item in elements]
-            left = sha256(h_elements[0] + h_elements[1]).digest()
-            right = sha256(h_elements[2] + h_elements[3]).digest()
-            root = sha256(left + right).digest()
-            return root
-
         spt = Sha256SparseMerkleTree(2)
 
         spt.add_element(0, b'apple')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'apple', b'\0', b'\0', b'\0'])
+        test_result = self.get_mt_4_root([b'apple', b'\0', b'\0', b'\0'])
         self.assertTrue(root == test_result)
 
         spt.add_element(1, b'avocado')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'apple', b'avocado', b'\0', b'\0'])
+        test_result = self.get_mt_4_root([b'apple', b'avocado', b'\0', b'\0'])
         self.assertTrue(root == test_result)
 
         spt.add_element(2, b'clock')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'\0'])
+        test_result = self.get_mt_4_root([b'apple', b'avocado', b'clock', b'\0'])
         self.assertTrue(root == test_result)
 
         spt.add_element(3, b'great')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
+        test_result = self.get_mt_4_root([b'apple', b'avocado', b'clock', b'great'])
         self.assertTrue(root == test_result)
 
     def test_step_by_step_equel_to_calculate_full_tree_result(self):
@@ -108,28 +101,21 @@ class UnitTest(unittest.TestCase):
 
     def test_remove(self):
 
-        def get_mt_4_root(elements):
-            h_elements = [sha256(item).digest() for item in elements]
-            left = sha256(h_elements[0] + h_elements[1]).digest()
-            right = sha256(h_elements[2] + h_elements[3]).digest()
-            root = sha256(left + right).digest()
-            return root
-
         spt = Sha256SparseMerkleTree(2)
 
         spt.add_element(1, b'fish')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'\0', b'fish', b'\0', b'\0'])
+        test_result = self.get_mt_4_root([b'\0', b'fish', b'\0', b'\0'])
         self.assertTrue(root == test_result)
 
         spt.add_element(3, b'ice')
         root = spt.get_root()
-        test_result = get_mt_4_root([b'\0', b'fish', b'\0', b'ice'])
+        test_result = self.get_mt_4_root([b'\0', b'fish', b'\0', b'ice'])
         self.assertTrue(root == test_result)
 
         spt.remove_element(1)
         root = spt.get_root()
-        test_result = get_mt_4_root([b'\0', b'\0', b'\0', b'ice'])
+        test_result = self.get_mt_4_root([b'\0', b'\0', b'\0', b'ice'])
         self.assertTrue(root == test_result)
 
     def test_value_exist(self):
@@ -175,19 +161,12 @@ class UnitTest(unittest.TestCase):
 
     def test_increase_depth(self):
 
-        def get_mt_4_root(elements):
-            h_elements = [sha256(item).digest() for item in elements]
-            left = sha256(h_elements[0] + h_elements[1]).digest()
-            right = sha256(h_elements[2] + h_elements[3]).digest()
-            root = sha256(left + right).digest()
-            return root
-
         spt = Sha256SparseMerkleTree(1)
         spt.set_elements([b'zero', b'one'])
         spt.increase_depth(1)
         root = spt.get_root()
 
-        test_result = get_mt_4_root([b'zero', b'one', b'\0', b'\0'])
+        test_result = self.get_mt_4_root([b'zero', b'one', b'\0', b'\0'])
 
         self.assertTrue(root == test_result)
 
