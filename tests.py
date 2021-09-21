@@ -4,7 +4,8 @@ from spt import Sha256SparseMerkleTree, SparseMerkleTree
 
 class UnitTest(unittest.TestCase):
 
-    def get_mt_4_root(self, elements):
+    @classmethod
+    def get_mt_4_root(cls, elements):
         h_elements = [sha256(item).digest() for item in elements]
         left = sha256(h_elements[0] + h_elements[1]).digest()
         right = sha256(h_elements[2] + h_elements[3]).digest()
