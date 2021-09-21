@@ -1,12 +1,12 @@
 import unittest
 from hashlib import sha256
-from spt import Sha256SparseMerkleTree
+from spt import Sha256SparseMerkleTree, SparseMerkleTree
 
 class UnitTest(unittest.TestCase):
 
     def test_empty_roots(self):
 
-        check_size = range(0, 15)
+        check_size = range(1, 15)
 
         def empties(i):
             if i==0:
@@ -213,6 +213,27 @@ class UnitTest(unittest.TestCase):
         except IndexError as i_e:
             is_e = True
             self.assertEqual(str(i_e), 'Trying to remove non empty subtree')
+        self.assertTrue(is_e)
+
+    def test_init_0(self):
+
+        is_e = False
+        try:
+            _ = Sha256SparseMerkleTree(0)
+        except ValueError as v_e:
+            is_e = True
+            self.assertEqual(str(v_e), 'Depth should be > 0')
+        self.assertTrue(is_e)
+
+    def test_no_hash(self):
+
+        is_e = False
+        try:
+            spt = SparseMerkleTree(2)
+            spt.set_elements([b'just', b'els'])
+        except NotImplementedError as n_i_e:
+            is_e = True
+            self.assertEqual(str(n_i_e), 'Please declare _calculate_hash')
         self.assertTrue(is_e)
 
 if __name__ == '__main__':

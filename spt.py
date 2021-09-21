@@ -5,17 +5,25 @@ from typing import Union
 class SparseMerkleTree():
 
     def __init__(self, depth: int) -> None:
+        self._check_b_than_0(depth, "Depth")
         self.empty_element = b'\0'
         self.cache_empty_values = {}
         self._setup_depth(depth)
         self.elements = {}
         self.lists = [{} for _ in range(0, self.depth + 1)]
 
+    @classmethod
+    def _check_b_than_0(cls, depth: int, name: str):
+        if depth < 1:
+            raise ValueError(name + " should be > 0")
+
     def _setup_depth(self, depth: int) -> None:
         self.depth = depth
         self.max_elements = 2**depth
 
     def increase_depth(self, amount_of_level: int) -> None:
+        self._check_b_than_0(amount_of_level, "amount_of_level")
+
         old_depth = self.depth
         new_depth = self.depth + amount_of_level
 
@@ -28,6 +36,9 @@ class SparseMerkleTree():
     def decrease_depth(self, amount_of_level: int) -> None:
         old_depth = self.depth
         new_depth = self.depth - amount_of_level
+
+        self._check_b_than_0(amount_of_level, "amount_of_level")
+        self._check_b_than_0(new_depth, "Depth")
 
         levels_check = range(new_depth, old_depth)
         lists = self.lists
@@ -164,7 +175,7 @@ class SparseMerkleTree():
 
     @classmethod
     def _calculate_hash(cls, _) -> bytes:
-        raise Exception("Please declare _calculate_hash")
+        raise NotImplementedError("Please declare _calculate_hash")
 
 class Sha256SparseMerkleTree(SparseMerkleTree):
 
